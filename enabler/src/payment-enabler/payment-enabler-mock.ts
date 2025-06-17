@@ -11,7 +11,7 @@ import {
   PaymentResult,
 } from "./payment-enabler";
 import { DropinEmbeddedBuilder } from "../dropin/dropin-embedded";
-
+import { BillingDetails } from "@stripe/stripe-js";
 declare global {
   interface ImportMeta {
     env: any;
@@ -26,6 +26,7 @@ export type BaseOptions = {
   locale?: string;
   onComplete: (result: PaymentResult) => void;
   onError: (error: any, context?: { paymentReference?: string }) => void;
+  billingAddress?: BillingDetails;
 };
 
 export class MockPaymentEnabler implements PaymentEnabler {
