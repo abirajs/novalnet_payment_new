@@ -46,6 +46,7 @@ export class Invoice extends BaseComponent {
   }
 
   async submit() {
+    console.log('checking');
     // here we would call the SDK to submit the payment
     this.sdk.init({ environment: this.environment });
     try {
