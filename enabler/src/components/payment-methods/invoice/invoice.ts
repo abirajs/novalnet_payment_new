@@ -55,8 +55,7 @@ export class Invoice extends BaseComponent {
   async submit() {
     // here we would call the SDK to submit the payment
     this.sdk.init({ environment: this.environment });
-    const billingDetails = this.baseOptions.billingAddress;
-    console.log("Saved billing address from Commerce Tools:", billingDetails);
+    console.log(this.baseOptions);
     try {
       const requestData: PaymentRequestSchemaDTO = {
         paymentMethod: {
