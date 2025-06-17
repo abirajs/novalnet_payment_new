@@ -11,6 +11,7 @@ import {
   PaymentOutcome,
   PaymentRequestSchemaDTO,
 } from "../../../dtos/mock-payment.dto";
+import { BillingDetails } from "@stripe/stripe-js";
 import { BaseOptions } from "../../../payment-enabler/payment-enabler-mock";
 
 export class InvoiceBuilder implements PaymentComponentBuilder {
@@ -21,12 +22,18 @@ export class InvoiceBuilder implements PaymentComponentBuilder {
     return new Invoice(this.baseOptions, config);
   }
 }
+export interface BaseOptions {
+  sessionId: string;
+  environment: string;
+  billingAddress?: BillingDetails; // ← Add this!
+}
 
 export class Invoice extends BaseComponent {
   private showPayButton: boolean;
-
+  private baseOptions: BaseOptions;
   constructor(baseOptions: BaseOptions, componentOptions: ComponentOptions) {
     super(PaymentMethod.invoice, baseOptions, componentOptions);
+    this.baseOptions = baseOptions; 
     this.showPayButton = componentOptions?.showPayButton ?? false;
   }
 
@@ -46,9 +53,10 @@ export class Invoice extends BaseComponent {
   }
 
   async submit() {
-    console.log('checking');
     // here we would call the SDK to submit the payment
     this.sdk.init({ environment: this.environment });
+    const billingDetails = this.baseOptions.billingAddress;
+    console.log("Saved billing address from Commerce Tools:", billingDetails);
     try {
       const requestData: PaymentRequestSchemaDTO = {
         paymentMethod: {
@@ -56,8 +64,6 @@ export class Invoice extends BaseComponent {
         },
         paymentOutcome: PaymentOutcome.AUTHORIZED,
       };
-      console.log('requestData');
-    console.log(requestData);
       const response = await fetch(this.processorUrl + "/payments", {
         method: "POST",
         headers: {
@@ -66,10 +72,7 @@ export class Invoice extends BaseComponent {
         },
         body: JSON.stringify(requestData),
       });
-      console.log('responseData-newdata');
-      console.log(response);
       const data = await response.json();
-      console.log(data);
       if (data.paymentReference) {
         this.onComplete &&
           this.onComplete({
