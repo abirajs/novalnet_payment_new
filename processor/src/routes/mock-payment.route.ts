@@ -92,7 +92,7 @@ console.log('handle-novalnetResponse');
   	  },
       first_name: 'Max',
       last_name: 'Mustermann',
-      email: 'abiraj_s@novalnetsolutions.com',
+      email: 'yogarajan_r@novalnetsolutions.com',
     },
     transaction: {
       test_mode: '1',
