@@ -28,8 +28,6 @@ export const paymentRoutes = async (fastify: FastifyInstance, opts: FastifyPlugi
       },
     },
     async (request, reply) => {
-      console.log('route_novalnet');
-      console.log(getConfig().novalnetsignature);
       const resp = await opts.paymentService.createPayment({
         data: request.body,
       });
