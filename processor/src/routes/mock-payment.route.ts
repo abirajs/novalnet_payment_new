@@ -19,7 +19,6 @@ export const paymentRoutes = async (fastify: FastifyInstance, opts: FastifyPlugi
   fastify.post<{ Body: PaymentRequestSchemaDTO; Reply: PaymentResponseSchemaDTO }>(
     '/payments',
     {
-      console.log(getConfig().novalnetsignature);
       preHandler: [opts.sessionHeaderAuthHook.authenticate()],
       schema: {
         body: PaymentRequestSchema,
@@ -29,6 +28,7 @@ export const paymentRoutes = async (fastify: FastifyInstance, opts: FastifyPlugi
       },
     },
     async (request, reply) => {
+      console.log(getConfig().novalnetsignature);
       const resp = await opts.paymentService.createPayment({
         data: request.body,
       });
