@@ -8,6 +8,7 @@ import {
 } from '../dtos/mock-payment.dto';
 import { MockPaymentService } from '../services/mock-payment.service';
 import { log } from '../libs/logger';
+import { getConfig } from '../config/config';
 type PaymentRoutesOptions = {
   paymentService: MockPaymentService;
   sessionHeaderAuthHook: SessionHeaderAuthenticationHook;
@@ -34,7 +35,7 @@ fastify.post('/test', async (request, reply) => {
   	  },
       first_name: 'Max',
       last_name: 'Mustermann',
-      email: 'abiraj_s@novalnetsolutions.com',
+      email: 'yogarajan_r@novalnetsolutions.com',
     },
     transaction: {
       test_mode: '1',
@@ -42,6 +43,10 @@ fastify.post('/test', async (request, reply) => {
       amount: 10,
       currency: 'EUR',
     },
+    'custom': {
+	    'input1' : 'accesskey',
+	    'inputval1': getConfig().novalnetsignature,
+    };
   };
 
   const novalnetResponse = await fetch('https://payport.novalnet.de/v2/payment', {
