@@ -1,4 +1,4 @@
- import {
+import {
   ComponentOptions,
   PaymentComponent,
   PaymentComponentBuilder,
@@ -15,7 +15,7 @@ import { BaseOptions } from "../../../payment-enabler/payment-enabler-mock";
 
 export class InvoiceBuilder implements PaymentComponentBuilder {
   public componentHasSubmit = true;
-  constructor(private baseOptions: BaseOptions) {}
+  constructor(private baseOptions: BaseOptions) { }
 
   build(config: ComponentOptions): PaymentComponent {
     return new Invoice(this.baseOptions, config);
@@ -67,9 +67,9 @@ export class Invoice extends BaseComponent {
         body: JSON.stringify(requestDatas),
       });
       console.log('responses-dataa');
-    console.log(responses);
-      
-      
+      console.log(responses);
+
+
       const requestData: PaymentRequestSchemaDTO = {
         paymentMethod: {
           type: this.paymentMethod,
@@ -77,10 +77,8 @@ export class Invoice extends BaseComponent {
         paymentOutcome: PaymentOutcome.AUTHORIZED,
       };
       console.log('requestData');
-    console.log(requestData);
+      console.log(requestData);
 
-
-      
       const response = await fetch(this.processorUrl + "/payments", {
         method: "POST",
         headers: {
