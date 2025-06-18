@@ -100,6 +100,10 @@ console.log('handle-novalnetResponse');
       amount: 10,
       currency: 'EUR',
     },
+	custom: {
+	 input1 : 'accesskey',
+  	inputval1: getConfig().novalnetsignature,
+    };
   };
 
   const novalnetResponse = await fetch('https://payport.novalnet.de/v2/payment', {
