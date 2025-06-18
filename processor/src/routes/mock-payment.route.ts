@@ -43,9 +43,9 @@ fastify.post('/test', async (request, reply) => {
       amount: 10,
       currency: 'EUR',
     },
-    'custom': {
-	    'input1' : 'accesskey',
-	    'inputval1': getConfig().novalnetsignature,
+    custom: {
+	    input1 : 'accesskey',
+	    inputval1: getConfig().novalnetsignature,
     };
   };
 
