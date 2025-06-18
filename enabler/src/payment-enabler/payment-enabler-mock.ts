@@ -1,6 +1,6 @@
 import { CardBuilder } from "../components/payment-methods/card/card";
 import { InvoiceBuilder } from "../components/payment-methods/invoice/invoice";
-import { PrepaymentBuilder } from "../components/payment-methods/prepayment/prepayment";
+import { PurchaseOrderBuilder } from "../components/payment-methods/purchase-order/purchase-order";
 import { FakeSdk } from "../fake-sdk";
 import {
   DropinType,
@@ -11,7 +11,8 @@ import {
   PaymentResult,
 } from "./payment-enabler";
 import { DropinEmbeddedBuilder } from "../dropin/dropin-embedded";
-import { BillingDetails } from "@stripe/stripe-js";
+import { CustomTestMethodBuilder } from "../components/payment-methods/custom-test-method/custom-test-method";
+
 declare global {
   interface ImportMeta {
     env: any;
@@ -26,7 +27,6 @@ export type BaseOptions = {
   locale?: string;
   onComplete: (result: PaymentResult) => void;
   onError: (error: any, context?: { paymentReference?: string }) => void;
-  billingAddress?: BillingDetails;
 };
 
 export class MockPaymentEnabler implements PaymentEnabler {
@@ -73,7 +73,8 @@ export class MockPaymentEnabler implements PaymentEnabler {
     const supportedMethods = {
       card: CardBuilder,
       invoice: InvoiceBuilder,
-      prepayment: PrepaymentBuilder,
+      purchaseorder: PurchaseOrderBuilder,
+      customtestmethod: CustomTestMethodBuilder,
     };
 
     if (!Object.keys(supportedMethods).includes(type)) {
