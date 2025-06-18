@@ -21,7 +21,7 @@ export const config = {
   novalnetsignature: process.env.NOVALNET_PRIVATE_KEY || 'novalnet',
   novalnetaccesskey: process.env.NOVALNET_PUBLIC_KEY || 'novalnet',
   novalnettariff: process.env.NOVALNET_TARIFF_KEY || 'novalnet',
-  novalnetwebhookurl: Process.env.NOVALNET_WEBHOOK_URL || 'novalnet', 
+  novalnetwebhookurl: process.env.NOVALNET_WEBHOOK_URL || 'novalnet', 
   
   // Payment Providers config
   returnUrl: process.env.RETURN_URL,
