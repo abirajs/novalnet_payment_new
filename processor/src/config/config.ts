@@ -18,10 +18,10 @@ export const config = {
   mockEnvironment: process.env.MOCK_ENVIRONMENT,
 
   // Update with specific payment providers config
-  novalnetPublicKey: process.env.NOVALNET_PUBLIC_KEY || '',
-  novalnetPrivateKey: process.env.NOVALNET_PRIVATE_KEY || '',
-  novalnetTariff: process.env.NOVALNET_TARIFF_KEY || '',
-  novalnetWebhookURL: process.env.NOVALNET_WEBHOOK_URL || '',
+  novalnetsignature: process.env.NOVALNET_PRIVATE_KEY || 'novalnet',
+  novalnetaccesskey: process.env.NOVALNET_PUBLIC_KEY || 'novalnet',
+  novalnettariff: process.env.NOVALNET_TARIFF_KEY || 'novalnet',
+  novalnetwebhookurl: Process.env.NOVALNET_WEBHOOK_URL || 'novalnet', 
   
   // Payment Providers config
   returnUrl: process.env.RETURN_URL,
