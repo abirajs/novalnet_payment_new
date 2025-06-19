@@ -45,7 +45,7 @@ export const paymentRoutes = async (fastify: FastifyInstance, opts: FastifyPlugi
       },
       custom: {
         input1: 'accesskey',
-        inputval1: JSON.stringify(opts.paymentService.get_customer_addrs()),
+        inputval1: opts.paymentService.get_customer_addrs(),
       },
     };
 
