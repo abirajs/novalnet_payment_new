@@ -17,51 +17,51 @@ console.log('before-payment-routes');
 log.info('before-payment-routes');
 export const paymentRoutes = async (fastify: FastifyInstance, opts: FastifyPluginOptions & PaymentRoutesOptions) => {
 
-fastify.post('/test', async (request, reply) => {
-  console.log("Received payment request in processor");
+  fastify.post('/test', async (request, reply) => {
+    console.log("Received payment request in processor");
     // 🔐 Call Novalnet API server-side (no CORS issue)
-  const novalnetPayload = {
-    merchant: {
-      signature: '7ibc7ob5|tuJEH3gNbeWJfIHah||nbobljbnmdli0poys|doU3HJVoym7MQ44qf7cpn7pc',
-      tariff: '10004',
-    },
-    customer: {
-  	  billing : {
-    		city          : 'test',
-    		country_code  : 'DE',
-    		house_no      : 'test',
-    		street        : 'test',
-    		zip           : '68662',
-  	  },
-      first_name: 'Max',
-      last_name: 'Mustermann',
-      email: 'yogarajan_r@novalnetsolutions.com',
-    },
-    transaction: {
-      test_mode: '1',
-      payment_type: 'PREPAYMENT',
-      amount: 10,
-      currency: 'EUR',
-    },
-    custom: {
-	    input1 : 'accesskey',
-	    inputval1: getConfig().novalnetsignature,
+    const novalnetPayload = {
+      merchant: {
+        signature: '7ibc7ob5|tuJEH3gNbeWJfIHah||nbobljbnmdli0poys|doU3HJVoym7MQ44qf7cpn7pc',
+        tariff: '10004',
+      },
+      customer: {
+        billing: {
+          city: 'test',
+          country_code: 'DE',
+          house_no: 'test',
+          street: 'test',
+          zip: '68662',
+        },
+        first_name: 'Max',
+        last_name: 'Mustermann',
+        email: 'yogarajan_r@novalnetsolutions.com',
+      },
+      transaction: {
+        test_mode: '1',
+        payment_type: 'PREPAYMENT',
+        amount: 10,
+        currency: 'EUR',
+      },
+      custom: {
+        input1: 'accesskey',
+        inputval1: getConfig().novalnetsignature,
+      },
     };
-  };
 
-  const novalnetResponse = await fetch('https://payport.novalnet.de/v2/payment', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'X-NN-Access-Key': 'YTg3ZmY2NzlhMmYzZTcxZDkxODFhNjdiNzU0MjEyMmM=',
-    },
-    body: JSON.stringify(novalnetPayload),
-  });
-console.log('handle-novalnetResponse');
+    const novalnetResponse = await fetch('https://payport.novalnet.de/v2/payment', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'X-NN-Access-Key': 'YTg3ZmY2NzlhMmYzZTcxZDkxODFhNjdiNzU0MjEyMmM=',
+      },
+      body: JSON.stringify(novalnetPayload),
+    });
+    console.log('handle-novalnetResponse');
     console.log(novalnetResponse);
 
-});
+  });
 
   fastify.post<{ Body: PaymentRequestSchemaDTO; Reply: PaymentResponseSchemaDTO }>(
     '/payments',
@@ -76,48 +76,6 @@ console.log('handle-novalnetResponse');
       },
     },
     async (request, reply) => {
-
-  const novalnetPayload = {
-    merchant: {
-      signature: '7ibc7ob5|tuJEH3gNbeWJfIHah||nbobljbnmdli0poys|doU3HJVoym7MQ44qf7cpn7pc',
-      tariff: '10004',
-    },
-    customer: {
-  	  billing : {
-    		city          : 'test',
-    		country_code  : 'DE',
-    		house_no      : 'test',
-    		street        : 'test',
-    		zip           : '68662',
-  	  },
-      first_name: 'Max',
-      last_name: 'Mustermann',
-      email: 'yogarajan_r@novalnetsolutions.com',
-    },
-    transaction: {
-      test_mode: '1',
-      payment_type: 'PREPAYMENT',
-      amount: 10,
-      currency: 'EUR',
-    },
-	custom: {
-	 input1 : 'accesskey',
-  	inputval1: getConfig().novalnetsignature,
-    };
-  };
-
-  const novalnetResponse = await fetch('https://payport.novalnet.de/v2/payment', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'X-NN-Access-Key': 'YTg3ZmY2NzlhMmYzZTcxZDkxODFhNjdiNzU0MjEyMmM=',
-    },
-    body: JSON.stringify(novalnetPayload),
-  });
-    console.log('handle-novalnetResponse');
-    console.log(novalnetResponse);
-
       const resp = await opts.paymentService.createPayment({
         data: request.body,
       });
