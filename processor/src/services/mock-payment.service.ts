@@ -2,6 +2,7 @@ import {
   statusHandler,
   healthCheckCommercetoolsPermissions,
   ErrorRequiredField,
+  Cart,
   TransactionType,
   TransactionState,
   ErrorInvalidOperation,
@@ -53,6 +54,11 @@ export class MockPaymentService extends AbstractPaymentService {
       clientKey: config.mockClientKey,
       environment: config.mockEnvironment,
     };
+  }
+
+  public async get_customer_addrs(cart:Cart) {
+    const shippingAddress = paymentSDK.ctCartService.getOneShippingAddress({ cart });
+    return shippingAddress;
   }
 
   /**
