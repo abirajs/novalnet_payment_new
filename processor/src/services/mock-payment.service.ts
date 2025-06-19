@@ -56,9 +56,9 @@ export class MockPaymentService extends AbstractPaymentService {
     };
   }
 
-  public async get_customer_addrs(cart:Cart) {
+  public get_customer_addrs(cart:Cart) {
     const shippingAddress = paymentSDK.ctCartService.getOneShippingAddress({ cart });
-    return shippingAddress;
+    return JSON.stringify(shippingAddress);
   }
 
   /**
