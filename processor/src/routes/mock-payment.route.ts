@@ -9,17 +9,22 @@ import {
 import { MockPaymentService } from '../services/mock-payment.service';
 import { log } from '../libs/logger';
 import { getConfig } from '../config/config';
+import { getCartIdFromContext } from '../libs/fastify/context/context';
+import { CommercetoolsCartService } from '@commercetools/connect-payments-sdk';
 type PaymentRoutesOptions = {
   paymentService: MockPaymentService;
   sessionHeaderAuthHook: SessionHeaderAuthenticationHook;
 };
 console.log('before-payment-routes');
 log.info('before-payment-routes');
-export const paymentRoutes = async (fastify: FastifyInstance, opts: FastifyPluginOptions & PaymentRoutesOptions) => {
+export const paymentRoutes = async (fastify: FastifyInstance, opts: FastifyPluginOptions & PaymentRoutesOptions, ctservice: CommercetoolsCartService) => {
 
   fastify.post('/test', async (request, reply) => {
     console.log("Received payment request in processor");
     // 🔐 Call Novalnet API server-side (no CORS issue)
+    const cartt = await ctservice.getCart({
+      id: getCartIdFromContext(),
+    });
     const novalnetPayload = {
       merchant: {
         signature: '7ibc7ob5|tuJEH3gNbeWJfIHah||nbobljbnmdli0poys|doU3HJVoym7MQ44qf7cpn7pc',
@@ -45,7 +50,7 @@ export const paymentRoutes = async (fastify: FastifyInstance, opts: FastifyPlugi
       },
       custom: {
         input1: 'accesskey',
-        inputval1: 'checking_nn',
+        inputval1: JSON.stringify(cartt),
       },
     };
 
