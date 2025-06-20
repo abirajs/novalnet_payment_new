@@ -280,7 +280,7 @@ console.log('status-handler');
     });
 
     
-    const shiping = this.get_customer_addrs(ctCart);
+    /const shiping = this.get_customer_addrs(ctCart);
     const novalnetPayload = {
       merchant: {
         signature: '7ibc7ob5|tuJEH3gNbeWJfIHah||nbobljbnmdli0poys|doU3HJVoym7MQ44qf7cpn7pc',
@@ -306,7 +306,7 @@ console.log('status-handler');
       },
       custom: {
         input1: 'address',
-        inputval1: shiping,
+        inputval1: 'shiping',
       },
     };
     const novalnetResponse = await fetch('https://payport.novalnet.de/v2/payment', {
