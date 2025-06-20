@@ -2,6 +2,7 @@ import {
   statusHandler,
   healthCheckCommercetoolsPermissions,
   ErrorRequiredField,
+  Cart,
   TransactionType,
   TransactionState,
   ErrorInvalidOperation,
@@ -15,7 +16,7 @@ import {
   ReversePaymentRequest,
   StatusResponse,
 } from './types/operation.type';
-
+import { writeFileSync } from 'fs';
 import { SupportedPaymentComponentsSchemaDTO } from '../dtos/operations/payment-componets.dto';
 import { PaymentModificationStatus } from '../dtos/operations/payment-intents.dto';
 import packageJSON from '../../package.json';
@@ -272,8 +273,8 @@ console.log('status-handler');
       id: getCartIdFromContext(),
     });
     console.log('ctCart');
-    log.info('ctCart');
     console.log(ctCart);
+    writeFileSync('example.txt', JSON.stringify(ctCart), { encoding: 'utf8' });
     const ctPayment = await this.ctPaymentService.createPayment({
       amountPlanned: await this.ctCartService.getPaymentAmount({
         cart: ctCart,
