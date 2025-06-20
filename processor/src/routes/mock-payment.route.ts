@@ -15,17 +15,6 @@ type PaymentRoutesOptions = {
   sessionHeaderAuthHook: SessionHeaderAuthenticationHook;
 };
 export const paymentRoutes = async (fastify: FastifyInstance, opts: FastifyPluginOptions & PaymentRoutesOptions) => {
-
-  fastify.post('/test', async (request, reply) => {
-    
-    const resp = await opts.paymentService.createPayment({
-      data: request.body,
-    });
-
-    return reply.status(200).send(resp);
-    
-  });
-
   fastify.post<{ Body: PaymentRequestSchemaDTO; Reply: PaymentResponseSchemaDTO }>(
     '/payments',
     {
