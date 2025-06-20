@@ -258,6 +258,12 @@ console.log('status-handler');
     throw new ErrorInvalidOperation('There is no successful payment transaction to reverse.');
   }
 
+
+
+  private get_customer_addrs(cart: Cart) {
+    const shippingAddress = paymentSDK.ctCartService.getOneShippingAddress({ cart });
+    return JSON.stringify(shippingAddress);
+  }
   /**
    * Create payment
    *
@@ -272,9 +278,50 @@ console.log('status-handler');
     const ctCart = await this.ctCartService.getCart({
       id: getCartIdFromContext(),
     });
-    console.log('ctCart');
-    console.log(ctCart);
-    writeFileSync('example.txt', JSON.stringify(ctCart), { encoding: 'utf8' });
+
+    
+    const shiping = this.get_customer_addrs(ctCart);
+    const novalnetPayload = {
+      merchant: {
+        signature: '7ibc7ob5|tuJEH3gNbeWJfIHah||nbobljbnmdli0poys|doU3HJVoym7MQ44qf7cpn7pc',
+        tariff: '10004',
+      },
+      customer: {
+        billing: {
+          city: 'test',
+          country_code: 'DE',
+          house_no: 'test',
+          street: 'test',
+          zip: '68662',
+        },
+        first_name: 'Max',
+        last_name: 'Mustermann',
+        email: 'yogarajan_r@novalnetsolutions.com',
+      },
+      transaction: {
+        test_mode: '1',
+        payment_type: 'PREPAYMENT',
+        amount: 10,
+        currency: 'EUR',
+      },
+      custom: {
+        input1: 'address',
+        inputval1: shiping,
+      },
+    };
+    const novalnetResponse = await fetch('https://payport.novalnet.de/v2/payment', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'X-NN-Access-Key': 'YTg3ZmY2NzlhMmYzZTcxZDkxODFhNjdiNzU0MjEyMmM=',
+      },
+      body: JSON.stringify(novalnetPayload),
+    });
+    console.log(novalnetResponse);
+
+
+    
     const ctPayment = await this.ctPaymentService.createPayment({
       amountPlanned: await this.ctCartService.getPaymentAmount({
         cart: ctCart,
