@@ -2,7 +2,6 @@ import {
   statusHandler,
   healthCheckCommercetoolsPermissions,
   ErrorRequiredField,
-  Cart,
   TransactionType,
   TransactionState,
   ErrorInvalidOperation,
@@ -55,14 +54,7 @@ export class MockPaymentService extends AbstractPaymentService {
       environment: config.mockEnvironment,
     };
   }
-
-  public async get_customer_addrs() {
-    var cartt = await this.ctCartService.getCart({
-      id: getCartIdFromContext(),
-    });
-    return JSON.stringify(cartt);
-  }
-
+  
   /**
    * Get status
    *
