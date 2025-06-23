@@ -258,10 +258,10 @@ console.log('status-handler');
 
 
   public async get_customer_addrs() {
-    // const CartDetails = await this.ctCartService.getCart({
-    //   id: getCartIdFromContext(),
-    // });
-    return 'checking';
+    const CartDetails = await this.ctCartService.getCart({
+      id: getCartIdFromContext(),
+    });
+    return JSON.stringify(CartDetails.body);
   }
   /**
    * Create payment
