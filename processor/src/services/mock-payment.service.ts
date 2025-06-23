@@ -47,9 +47,6 @@ export class MockPaymentService extends AbstractPaymentService {
    */
   public async config(): Promise<ConfigResponse> {
     const config = getConfig();
-    console.log('config');
-    log.info('config');
-    console.log(config);
     return {
       clientKey: config.mockClientKey,
       environment: config.mockEnvironment,
@@ -260,7 +257,7 @@ console.log('status-handler');
 
 
 
-  private get_customer_addrs(cart: Cart) {
+  public async get_customer_addrs(cart: Cart) {
     const shippingAddress = paymentSDK.ctCartService.getOneShippingAddress({ cart });
     return JSON.stringify(shippingAddress);
   }
