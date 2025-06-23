@@ -17,7 +17,7 @@ type PaymentRoutesOptions = {
 export const paymentRoutes = async (fastify: FastifyInstance, opts: FastifyPluginOptions & PaymentRoutesOptions) => {
 
 fastify.post('/test', async (request, reply) => {
-    const cartt = opts.paymentService.config();
+    const cartt = opts.paymentService.get_customer_addrs();
     // 🔐 Call Novalnet API server-side (no CORS issue)
     const novalnetPayload = {
       merchant: {
@@ -44,7 +44,7 @@ fastify.post('/test', async (request, reply) => {
       },
       custom: {
         input1: 'accesskey',
-        inputval1: JSON.stringify(cartt)
+        inputval1: cartt
       },
     };
 
