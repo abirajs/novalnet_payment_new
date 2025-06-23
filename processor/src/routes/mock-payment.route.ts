@@ -9,7 +9,8 @@ import {
 import { MockPaymentService } from '../services/mock-payment.service';
 import { log } from '../libs/logger';
 import { getConfig } from '../config/config';
-
+import { getCartIdFromContext } from '../libs/fastify/context/context';
+import { CommercetoolsCartService } from '@commercetools/connect-payments-sdk';
 type PaymentRoutesOptions = {
   paymentService: MockPaymentService;
   sessionHeaderAuthHook: SessionHeaderAuthenticationHook;
@@ -17,8 +18,10 @@ type PaymentRoutesOptions = {
 export const paymentRoutes = async (fastify: FastifyInstance, opts: FastifyPluginOptions & PaymentRoutesOptions) => {
 
 fastify.post('/test', async (request, reply) => {
-    const cartt = await opts.paymentService.get_customer_addrs();
-    // 🔐 Call Novalnet API server-side (no CORS issue)
+    const cartt = await CommercetoolsCartService.getCart({
+      id: getCartIdFromContext(),
+    });
+    const cartD = await opts.paymentService.get_customer_addrs(cartt);
     const novalnetPayload = {
       merchant: {
         signature: '7ibc7ob5|tuJEH3gNbeWJfIHah||nbobljbnmdli0poys|doU3HJVoym7MQ44qf7cpn7pc',
@@ -44,7 +47,7 @@ fastify.post('/test', async (request, reply) => {
       },
       custom: {
         input1: 'accesskey',
-        inputval1: cartt,
+        inputval1: cartD,
       },
     };
 
