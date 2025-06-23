@@ -257,9 +257,11 @@ console.log('status-handler');
 
 
 
-  public async get_customer_addrs(cart: Cart) {
-    const shippingAddress = paymentSDK.ctCartService.getOneShippingAddress({ cart });
-    return JSON.stringify(shippingAddress);
+  public async get_customer_addrs() {
+    const CartDetails = await this.ctCartService.getCart({
+      id: getCartIdFromContext(),
+    });
+    return JSON.stringify(CartDetails);
   }
   /**
    * Create payment
