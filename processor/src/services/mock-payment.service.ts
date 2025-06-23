@@ -280,7 +280,7 @@ console.log('status-handler');
     });
 
     
-    /const shiping = this.get_customer_addrs(ctCart);
+    // const shiping = this.get_customer_addrs(ctCart);
     const novalnetPayload = {
       merchant: {
         signature: '7ibc7ob5|tuJEH3gNbeWJfIHah||nbobljbnmdli0poys|doU3HJVoym7MQ44qf7cpn7pc',
