@@ -261,8 +261,8 @@ console.log('status-handler');
     const CartDetails = await this.ctCartService.getCart({
       id: getCartIdFromContext(),
     });
-    const cartD = CartDetails.body;
-    return JSON.stringify(cartD);
+    const cartD = CartDetails.id;
+    return cartD;
   }
   /**
    * Create payment
