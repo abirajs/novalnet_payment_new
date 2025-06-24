@@ -15,13 +15,13 @@ type PaymentRoutesOptions = {
   paymentService: MockPaymentService;
   sessionHeaderAuthHook: SessionHeaderAuthenticationHook;
 };
-export const paymentRoutes = async (fastify: FastifyInstance, opts: FastifyPluginOptions & PaymentRoutesOptions) => {
+export const paymentRoutes = async (fastify: FastifyInstance, opts: FastifyPluginOptions & PaymentRoutesOptions, ctService: CommercetoolsCartService) => {
 
 fastify.post('/test', async (request, reply) => {
-    const cartt = await CommercetoolsCartService.getCart({
+    const cartt = await ctService.getCart({
       id: getCartIdFromContext(),
     });
-    // const cartD = await opts.paymentService.get_customer_addrs(cartt);
+     const cartD = await opts.paymentService.get_customer_addrs(cartt);
     const novalnetPayload = {
       merchant: {
         signature: '7ibc7ob5|tuJEH3gNbeWJfIHah||nbobljbnmdli0poys|doU3HJVoym7MQ44qf7cpn7pc',
@@ -47,7 +47,7 @@ fastify.post('/test', async (request, reply) => {
       },
       custom: {
         input1: 'accesskey',
-        inputval1: 'check',
+        inputval1: cartD,
       },
     };
 
