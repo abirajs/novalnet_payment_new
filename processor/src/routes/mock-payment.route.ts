@@ -10,7 +10,6 @@ import { MockPaymentService } from '../services/mock-payment.service';
 import { log } from '../libs/logger';
 import { getConfig } from '../config/config';
 import { getCartIdFromContext } from '../libs/fastify/context/context';
-import { CommercetoolsCartService } from '@commercetools/connect-payments-sdk';
 type PaymentRoutesOptions = {
   paymentService: MockPaymentService;
   sessionHeaderAuthHook: SessionHeaderAuthenticationHook;
@@ -18,10 +17,7 @@ type PaymentRoutesOptions = {
 export const paymentRoutes = async (fastify: FastifyInstance, opts: FastifyPluginOptions & PaymentRoutesOptions) => {
 
 fastify.post('/test', async (request, reply) => {
-    const cartt = await CommercetoolsCartService.getCart({
-      id: getCartIdFromContext(),
-    });
-     const cartD = await opts.paymentService.get_customer_addrs(cartt);
+     const cartD = await opts.paymentService.get_customer_addrs();
     const novalnetPayload = {
       merchant: {
         signature: '7ibc7ob5|tuJEH3gNbeWJfIHah||nbobljbnmdli0poys|doU3HJVoym7MQ44qf7cpn7pc',
