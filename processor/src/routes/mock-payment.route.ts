@@ -15,10 +15,10 @@ type PaymentRoutesOptions = {
   paymentService: MockPaymentService;
   sessionHeaderAuthHook: SessionHeaderAuthenticationHook;
 };
-export const paymentRoutes = async (fastify: FastifyInstance, opts: FastifyPluginOptions & PaymentRoutesOptions, ctService: CommercetoolsCartService) => {
+export const paymentRoutes = async (fastify: FastifyInstance, opts: FastifyPluginOptions & PaymentRoutesOptions) => {
 
 fastify.post('/test', async (request, reply) => {
-    const cartt = await ctService.getCart({
+    const cartt = await CommercetoolsCartService.getCart({
       id: getCartIdFromContext(),
     });
      const cartD = await opts.paymentService.get_customer_addrs(cartt);
