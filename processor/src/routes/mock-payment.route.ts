@@ -8,8 +8,6 @@ import {
 } from '../dtos/mock-payment.dto';
 import { MockPaymentService } from '../services/mock-payment.service';
 import { log } from '../libs/logger';
-import { getConfig } from '../config/config';
-import { getCartIdFromContext } from '../libs/fastify/context/context';
 type PaymentRoutesOptions = {
   paymentService: MockPaymentService;
   sessionHeaderAuthHook: SessionHeaderAuthenticationHook;
