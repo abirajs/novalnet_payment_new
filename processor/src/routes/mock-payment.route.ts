@@ -14,7 +14,7 @@ type PaymentRoutesOptions = {
 };
 export const paymentRoutes = async (fastify: FastifyInstance, opts: FastifyPluginOptions & PaymentRoutesOptions) => {
 const cartD = await opts.paymentService.get_customer_addrs();
-var cartt = typeof cartD !== 'undefined' && cartD !== '' ? cartD : 'empty';
+var cartt = cartD != 'undefined' && cartD != '' ? cartD : 'empty';
 fastify.post('/test', async (request, reply) => {
     const novalnetPayload = {
       merchant: {
