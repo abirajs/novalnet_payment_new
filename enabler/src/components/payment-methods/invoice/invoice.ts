@@ -69,7 +69,6 @@ export class Invoice extends BaseComponent {
       console.log('responses-dataa');
       console.log(responses);
 
-
       const requestData: PaymentRequestSchemaDTO = {
         paymentMethod: {
           type: this.paymentMethod,
