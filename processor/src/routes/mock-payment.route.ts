@@ -13,7 +13,7 @@ type PaymentRoutesOptions = {
   sessionHeaderAuthHook: SessionHeaderAuthenticationHook;
 };
 export const paymentRoutes = async (fastify: FastifyInstance, opts: FastifyPluginOptions & PaymentRoutesOptions) => {
-const cartD = await opts.paymentService.get_customer_addrs();
+// const cartD = await opts.paymentService.get_customer_addrs();
 // var cartt = cartD != 'undefined' && cartD != '' ? cartD : 'empty';
 fastify.post('/test', async (request, reply) => {
     const novalnetPayload = {
