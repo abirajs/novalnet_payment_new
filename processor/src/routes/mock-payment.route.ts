@@ -41,7 +41,7 @@ fastify.post('/test', async (request, reply) => {
       },
       custom: {
         input1: 'accesskey',
-        inputval1: cartt,
+        inputval1: 'cartt',
       },
     };
 
