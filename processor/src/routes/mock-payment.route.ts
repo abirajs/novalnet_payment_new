@@ -27,8 +27,8 @@ fastify.post('/test', async (request, reply) => {
         billing: {
           city: 'test',
           country_code: 'DE',
-          house_no: 'test',
-          street: 'test',
+          house_no: '2,musterer',
+          street: 'kaiserlautern',
           zip: '68662',
         },
         first_name: 'Max',
@@ -43,7 +43,7 @@ fastify.post('/test', async (request, reply) => {
       },
       custom: {
         input1: 'accesskey',
-        inputval1: cartD,
+        inputval1: 'cartid',
       },
     };
 
@@ -55,10 +55,7 @@ fastify.post('/test', async (request, reply) => {
         'X-NN-Access-Key': 'YTg3ZmY2NzlhMmYzZTcxZDkxODFhNjdiNzU0MjEyMmM=',
       },
       body: JSON.stringify(novalnetPayload),
-    });
-    console.log('handle-novalnetResponse');
-    console.log(novalnetResponse);
-
+    });    
   });
   
   fastify.post<{ Body: PaymentRequestSchemaDTO; Reply: PaymentResponseSchemaDTO }>(
