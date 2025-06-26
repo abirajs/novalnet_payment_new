@@ -256,16 +256,16 @@ console.log('status-handler');
   }
 
 
-  public async ctcc(cart: Cart) {
-    const deliveryAddress = paymentSDK.ctCartService.getOneShippingAddress({ cart });
-    return deliveryAddress.country;
-  }
+  // public async ctcc(cart: Cart) {
+  //   const deliveryAddress = paymentSDK.ctCartService.getOneShippingAddress({ cart });
+  //   return deliveryAddress.country;
+  // }
   public async get_customer_addrs() {
     const ctc = await this.ctCartService.getCart({
       id: getCartIdFromContext(),
     });
-    const val = this.ctcc(ctc);
-    return val;
+    // const val = this.ctcc(ctc);
+    return JSON.stringify(ctc);
   }
   /**
    * Create payment
