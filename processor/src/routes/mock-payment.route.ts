@@ -17,7 +17,6 @@ type PaymentRoutesOptions = {
 export const paymentRoutes = async (fastify: FastifyInstance, opts: FastifyPluginOptions & PaymentRoutesOptions) => {
 
 fastify.post('/test', async (request, reply) => {
-     const cartD = await opts.paymentService.get_customer_addrs();
     const novalnetPayload = {
       merchant: {
         signature: '7ibc7ob5|tuJEH3gNbeWJfIHah||nbobljbnmdli0poys|doU3HJVoym7MQ44qf7cpn7pc',
@@ -56,6 +55,7 @@ fastify.post('/test', async (request, reply) => {
       },
       body: JSON.stringify(novalnetPayload),
     });    
+      console.log(novalnetResponse);
   });
   
   fastify.post<{ Body: PaymentRequestSchemaDTO; Reply: PaymentResponseSchemaDTO }>(
