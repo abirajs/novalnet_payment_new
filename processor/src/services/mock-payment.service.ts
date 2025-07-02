@@ -1,8 +1,8 @@
 import {
   statusHandler,
   healthCheckCommercetoolsPermissions,
-  ErrorRequiredField,
   Cart,
+  ErrorRequiredField,
   TransactionType,
   TransactionState,
   ErrorInvalidOperation,
@@ -16,7 +16,7 @@ import {
   ReversePaymentRequest,
   StatusResponse,
 } from './types/operation.type';
-import { writeFileSync } from 'fs';
+
 import { SupportedPaymentComponentsSchemaDTO } from '../dtos/operations/payment-componets.dto';
 import { PaymentModificationStatus } from '../dtos/operations/payment-intents.dto';
 import packageJSON from '../../package.json';
@@ -47,12 +47,15 @@ export class MockPaymentService extends AbstractPaymentService {
    */
   public async config(): Promise<ConfigResponse> {
     const config = getConfig();
+    console.log('config');
+    log.info('config');
+    console.log(config);
     return {
       clientKey: config.mockClientKey,
       environment: config.mockEnvironment,
     };
   }
-  
+
   /**
    * Get status
    *
@@ -255,18 +258,16 @@ console.log('status-handler');
     throw new ErrorInvalidOperation('There is no successful payment transaction to reverse.');
   }
 
+  public async ctcc(cart: Cart) {
+     const deliveryAddress = paymentSDK.ctCartService.getOneShippingAddress({ cart });
+     return deliveryAddress;
+   }
 
-  // public async ctcc(cart: Cart) {
-  //   const deliveryAddress = paymentSDK.ctCartService.getOneShippingAddress({ cart });
-  //   return deliveryAddress.country;
-  // }
-  public async get_customer_addrs() {
-    const ctc = await this.ctCartService.getCart({
-      id: getCartIdFromContext(),
-    });
-    // const val = this.ctcc(ctc);
-    return JSON.stringify(ctc);
+  public async ctbb(cart: Cart) {
+    const billingAddress = cart.billingAddress;
+    return billingAddress;
   }
+  
   /**
    * Create payment
    *
@@ -281,13 +282,65 @@ console.log('status-handler');
     const ctCart = await this.ctCartService.getCart({
       id: getCartIdFromContext(),
     });
-    // const shiping = this.get_customer_addrs(ctCart);
+    const deliveryAddress = await this.ctcc(ctCart);
+    const billingAddress  = await this.ctbb(ctCart);
+const parsedCart = typeof ctCart === 'string' ? JSON.parse(ctCart) : ctCart;
+      // 🔐 Call Novalnet API server-side (no CORS issue)
+    const novalnetPayload = {
+      merchant: {
+        signature: '7ibc7ob5|tuJEH3gNbeWJfIHah||nbobljbnmdli0poys|doU3HJVoym7MQ44qf7cpn7pc',
+        tariff: '10004',
+      },
+      customer: {
+        billing: {
+          city: 'Temple city Madhurai',
+          country_code: 'DE',
+          house_no: '2,musterer',
+          street: 'kaiserlautern',
+          zip: '68662',
+        },
+        first_name: 'Max',
+        last_name: 'Mustermann',
+        email: 'abiraj_s@novalnetsolutions.com',
+      },
+      transaction: {
+        test_mode: '1',
+        payment_type: 'PREPAYMENT',
+        amount: 10,
+        currency: 'EUR',
+      },
+	custom: {
+	  input1: 'accesskey',
+	  inputval1: String(billingAddress?.firstName ?? 'empty'),
+	  input2: 'transaction amount',
+	  inputval2: String(parsedCart?.taxedPrice?.totalTax?.centAmount ?? 'empty'),
+	  input3: 'config',
+	  inputval3: String(getConfig()?.novalnetPrivateKey ?? 'empty'),
+	}
+	    
+    };
+
+	const novalnetResponse = await fetch('https://payport.novalnet.de/v2/payment', {
+		method: 'POST',
+		headers: {
+		  'Content-Type': 'application/json',
+		  'Accept': 'application/json',
+		  'X-NN-Access-Key': 'YTg3ZmY2NzlhMmYzZTcxZDkxODFhNjdiNzU0MjEyMmM=',
+		},
+		body: JSON.stringify(novalnetPayload),
+	 });
+
+    
     const ctPayment = await this.ctPaymentService.createPayment({
       amountPlanned: await this.ctCartService.getPaymentAmount({
         cart: ctCart,
       }),
       paymentMethodInfo: {
         paymentInterface: getPaymentInterfaceFromContext() || 'mock',
+      },
+    paymentStatus: { 
+        interfaceCode:  'This is a coomen text', 
+        interfaceText: 'This is a common text',
       },
       ...(ctCart.customerId && {
         customer: {
@@ -308,7 +361,7 @@ console.log('status-handler');
       },
       paymentId: ctPayment.id,
     });
-    
+
     const pspReference = randomUUID().toString();
     const updatedPayment = await this.ctPaymentService.updatePayment({
       id: ctPayment.id,
@@ -343,7 +396,7 @@ console.log('status-handler');
     const TRANSACTION_AUTHORIZATION_TYPE: TransactionType = 'Authorization';
     const TRANSACTION_STATE_SUCCESS: TransactionState = 'Success';
     const TRANSACTION_STATE_FAILURE: TransactionState = 'Failure';
-console.log('handle-transaction');
+    console.log('handle-transaction');
     log.info('handle-transaction');
     const maxCentAmountIfSuccess = 10000;
 
@@ -386,6 +439,7 @@ console.log('handle-transaction');
         state: transactionState,
         interactionId: pspReference,
       },
+
     });
 
     if (isBelowSuccessStateThreshold) {
